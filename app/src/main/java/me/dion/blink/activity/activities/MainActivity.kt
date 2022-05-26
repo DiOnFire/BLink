@@ -14,6 +14,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.dion.blink.R
 import me.dion.blink.activity.alerts.AbstractAlert
+import me.dion.blink.activity.alerts.LoadingDialog
 import me.dion.blink.task.RequestThread
 import me.dion.blink.util.SerializableResponse
 import okhttp3.*
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var passwordTextEdit: EditText
     private lateinit var forgotPwdText: TextView
     private lateinit var registerText: TextView
+    private lateinit var loadingDialog: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +40,10 @@ class MainActivity : AppCompatActivity() {
         passwordTextEdit = findViewById(R.id.password_text_edit)
         forgotPwdText = findViewById(R.id.forgot_pwd_text)
         registerText = findViewById(R.id.create_acc_text)
+        loadingDialog = LoadingDialog(this@MainActivity)
 
         loginButton.setOnClickListener {
+            loadingDialog.startLoadingDialog()
             executeLogin()
         }
 
@@ -144,6 +148,7 @@ class MainActivity : AppCompatActivity() {
         // ебашим хандлер шоб выловить говно с треда
         val handler = object : Handler() {
             override fun handleMessage(msg: Message) {
+                loadingDialog.dismissDialog()
                 val bundle = msg.data
                 // сериализабле респонз = мега говно чтобы наебать андроид через сериализацию (адаптер с okhttp на байты)
                 val response: SerializableResponse = bundle.get("response") as SerializableResponse
