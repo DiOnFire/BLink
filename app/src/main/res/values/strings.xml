@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">BLink</string>
+    <string name="app_title">Bloomware</string>
+    <string name="logo_title_activity_desc">bloomware_logo</string>
+    <string name="login_btn_text">Sign In</string>
+    <string name="register_btn_text">Sign Up</string>
+    <string name="login_text_edit_text">Login</string>
+    <string name="password_text_edit_text">Password</string>
+    <string name="forgot_password_text">Forgot password?</string>
+    <string name="register_text">Don\'t have an account? Register a new one!</string>
+    <string name="bloomware_api_url">http://127.0.0.1:8000/</string>
+    <string name="api_url_status">http://127.0.0.1:8000/api/status</string>
+    <string name="api_url_get_me">http://127.0.0.1:8000/api/users/me</string>
+    <string name="api_url_send_mail">http://127.0.0.1:8000/api/users/me/mail_link</string>
+</resources>
