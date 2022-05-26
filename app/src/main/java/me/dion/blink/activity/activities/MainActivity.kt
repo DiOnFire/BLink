@@ -1,5 +1,6 @@
 package me.dion.blink.activity.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -7,10 +8,13 @@ import android.widget.EditText
 import android.widget.TextView
 import me.dion.blink.R
 import me.dion.blink.activity.alerts.NoConnectionAlert
-import me.dion.blink.activity.alerts.login.TooShortLoginAlert
-import me.dion.blink.activity.alerts.login.TooShortPasswordAlert
+import me.dion.blink.activity.alerts.auth.TooShortLoginAlert
+import me.dion.blink.activity.alerts.auth.TooShortPasswordAlert
 import me.dion.blink.task.RequestTask
+import okhttp3.FormBody
 import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 
 class MainActivity : AppCompatActivity() {
     private lateinit var loginButton: Button
@@ -56,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             val response = RequestTask().execute(testRequest).get()
 
             if (response != null && response.isSuccessful) {
-                println()
+                val accessToken = auth()
             } else {
                 NoConnectionAlert().show(supportFragmentManager, "noConnectionAlert")
                 loginButton.isEnabled = true
@@ -64,7 +68,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun executeRegister() {
+    private fun auth(): String {
+        val requestBody = FormBody.Builder()
+            .add("username", loginTextEdit.text.toString())
+            .add("password", passwordTextEdit.text.toString())
+            .build()
 
+        val authRequest = Request.Builder()
+            .url(resources.getString(R.string.api_url_auth))
+            .post(requestBody)
+            .build()
+
+        val response = RequestTask().execute(authRequest).get()
+    }
+
+    private fun parseToken(response: Response): String {
+
+    }
+
+    private fun executeRegister() {
+        val intent = Intent(
+            this,
+            RegisterAccountActivity::class.java
+        )
+        startActivity(intent)
     }
 }
