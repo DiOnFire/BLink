@@ -10,10 +10,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.dion.blink.R
-import me.dion.blink.activity.alerts.NoConnectionAlert
-import me.dion.blink.activity.alerts.auth.InvalidCredentialsAlert
-import me.dion.blink.activity.alerts.auth.TooShortLoginAlert
-import me.dion.blink.activity.alerts.auth.TooShortPasswordAlert
+import me.dion.blink.activity.alerts.AbstractAlert
 import me.dion.blink.task.RequestTask
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -48,10 +45,10 @@ class MainActivity : AppCompatActivity() {
         loginButton.isEnabled = false
 
         if (loginTextEdit.text.length < 3) {
-            TooShortLoginAlert().show(supportFragmentManager, "tooShortLoginAlert")
+            AbstractAlert("Login too short", "Your login must contain 3 or more symbols").show(supportFragmentManager, "tooShortLoginAlert")
             loginButton.isEnabled = true
         } else if (passwordTextEdit.text.length < 8) {
-            TooShortPasswordAlert().show(supportFragmentManager, "tooShortPasswordAlert")
+            AbstractAlert("Password too short", "Your password must contain 8 or more symbols.").show(supportFragmentManager, "tooShortPasswordAlert")
             loginButton.isEnabled = true
         } else {
             val testRequest = Request.Builder()
@@ -64,10 +61,10 @@ class MainActivity : AppCompatActivity() {
             if (response != null && response.isSuccessful) {
                 val accessToken = auth()
                 if (accessToken == "null") {
-                    InvalidCredentialsAlert().show(supportFragmentManager, "invalidCredentialsAlert")
+                    AbstractAlert("Invalid credentials", "Login or password is not correct. Try again.").show(supportFragmentManager, "invalidCredentialsAlert")
                 }
             } else {
-                NoConnectionAlert().show(supportFragmentManager, "noConnectionAlert")
+                AbstractAlert("Connection error", "Something went wrong. Try again later.").show(supportFragmentManager, "noConnectionAlert")
                 loginButton.isEnabled = true
             }
         }

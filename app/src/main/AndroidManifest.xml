@@ -18,7 +18,7 @@
         android:theme="@style/Theme.Blink"
         tools:targetApi="31">
         <activity
-            android:name=".CheckEmailActivity"
+            android:name=".activity.activities.CheckEmailActivity"
             android:exported="false" />
         <activity
             android:name=".activity.activities.RegisterAccountActivity"
