@@ -11,6 +11,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.dion.blink.R
 import me.dion.blink.activity.alerts.AbstractAlert
+import me.dion.blink.activity.alerts.LoadingDialog
 import me.dion.blink.task.RequestTask
 import me.dion.blink.util.Validator
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -23,6 +24,7 @@ class RegisterAccountActivity : AppCompatActivity() {
     private lateinit var passwordEdit: EditText
     private lateinit var backText: TextView
     private lateinit var signUpBtn: Button
+    private lateinit var loadingDialog: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +34,15 @@ class RegisterAccountActivity : AppCompatActivity() {
         emailEdit = findViewById(R.id.email_text_edit)
         passwordEdit = findViewById(R.id.password_text_edit)
         backText = findViewById(R.id.back_text)
-        signUpBtn = findViewById(R.id.register_btn)
+        signUpBtn = findViewById(R.id.back_btn)
+
+        loadingDialog = LoadingDialog(this@RegisterAccountActivity)
 
         backText.setOnClickListener {
             finish()
         }
         signUpBtn.setOnClickListener {
+            loadingDialog.startLoadingDialog()
             if (validateRegister()) {
                 register()
             }
@@ -78,6 +83,7 @@ class RegisterAccountActivity : AppCompatActivity() {
         if (json.get("error") != null) {
             handleError(json.get("error").asString)
         } else {
+            loadingDialog.dismissDialog()
             continueReg()
         }
     }

@@ -1,8 +1,11 @@
 package me.dion.blink.activity.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -11,10 +14,14 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.dion.blink.R
 import me.dion.blink.activity.alerts.AbstractAlert
-import me.dion.blink.task.RequestTask
+import me.dion.blink.task.RequestThread
+import me.dion.blink.util.SerializableResponse
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 
+// TODO: ACCESS TOKEN LOADER
+
+@SuppressLint("HandlerLeak")
 class MainActivity : AppCompatActivity() {
     private lateinit var loginButton: Button
     private lateinit var loginTextEdit: EditText
@@ -56,21 +63,25 @@ class MainActivity : AppCompatActivity() {
                 .get()
                 .build()
 
-            val response = RequestTask().execute(testRequest).get()
-
-            if (response != null && response.isSuccessful) {
-                val accessToken = auth()
-                if (accessToken == "null") {
-                    AbstractAlert("Invalid credentials", "Login or password is not correct. Try again.").show(supportFragmentManager, "invalidCredentialsAlert")
+            val handler = object : Handler() {
+                override fun handleMessage(msg: Message) {
+                    val bundle = msg.data
+                    val response: SerializableResponse = bundle.get("response") as SerializableResponse
+                    if (response.response != null && response.response.isSuccessful) {
+                        auth()
+                    } else {
+                        AbstractAlert("Connection error", "Something went wrong. Try again later.").show(supportFragmentManager, "noConnectionAlert")
+                        loginButton.isEnabled = true
+                    }
                 }
-            } else {
-                AbstractAlert("Connection error", "Something went wrong. Try again later.").show(supportFragmentManager, "noConnectionAlert")
-                loginButton.isEnabled = true
             }
+
+            val thread = RequestThread(handler, testRequest)
+            thread.start()
         }
     }
 
-    private fun auth(): String {
+    private fun auth() {
         val obj = JsonObject()
         obj.addProperty("username", loginTextEdit.text.toString())
         obj.addProperty("password", passwordTextEdit.text.toString())
@@ -82,8 +93,22 @@ class MainActivity : AppCompatActivity() {
             .post(requestBody)
             .build()
 
-        val response = RequestTask().execute(authRequest).get()
-        return parseToken(response)
+        val handler = object : Handler() {
+            override fun handleMessage(msg: Message) {
+                val bundle = msg.data
+                val response: SerializableResponse = bundle.get("response") as SerializableResponse
+                val accessToken = parseToken(response.response)
+                if (accessToken == "null") {
+                    AbstractAlert("Invalid credentials", "Login or password is not correct. Try again.").show(supportFragmentManager, "invalidCredentialsAlert")
+                } else {
+                    intent.putExtra("access_token", accessToken)
+                    checkEmail()
+                }
+            }
+        }
+
+        val thread = RequestThread(handler, authRequest)
+        thread.start()
     }
 
     private fun parseToken(response: Response): String {
@@ -98,5 +123,51 @@ class MainActivity : AppCompatActivity() {
             RegisterAccountActivity::class.java
         )
         startActivity(intent)
+    }
+
+    private fun parseEmail(response: Response): Boolean {
+        val json = JsonParser.parseString(response.body.string()).asJsonObject
+        return json.get("email_verified").asBoolean
+    }
+
+    private fun executeEmail() {
+        val intent = Intent(
+            this,
+            CheckEmailActivity::class.java
+        )
+        startActivity(intent)
+    }
+
+    private fun checkEmail() {
+        // эта херь работает блядь ахахахахха
+
+        // ебашим хандлер шоб выловить говно с треда
+        val handler = object : Handler() {
+            override fun handleMessage(msg: Message) {
+                val bundle = msg.data
+                // сериализабле респонз = мега говно чтобы наебать андроид через сериализацию (адаптер с okhttp на байты)
+                val response: SerializableResponse = bundle.get("response") as SerializableResponse
+                if (!parseEmail(response.response)) {
+                    executeEmail()
+                }
+            }
+        }
+
+        // аццесс через токен
+        val headers = Headers.Builder()
+            .add("Authorization", "Bearer " + intent.getStringExtra("access_token"))
+            .add("credentials", "include")
+            .build()
+
+        // ебашим реквест
+        val request = Request.Builder()
+            .url(resources.getString(R.string.api_url_get_me))
+            .headers(headers)
+            .build()
+
+        // запускаем поток с говном
+        val thread = RequestThread(handler, request)
+
+        thread.start()
     }
 }
