@@ -14,7 +14,9 @@
     <string name="api_url_get_me">https://bloomware-web-api.herokuapp.com/api/users/me</string>
     <string name="api_url_register">https://bloomware-web-api.herokuapp.com/api/users/create</string>
     <string name="api_url_send_mail">https://bloomware-web-api.herokuapp.com/api/users/me/mail_link</string>
+    <string name="check_inbox">Registration completed. Check your inbox to verify your account.</string>
     <string name="register_account">Create a new account</string>
+    <string name="back_to_login">Back to sign in</string>
     <string name="email">Email</string>
     <string name="back"><![CDATA[< Back]]></string>
 </resources>

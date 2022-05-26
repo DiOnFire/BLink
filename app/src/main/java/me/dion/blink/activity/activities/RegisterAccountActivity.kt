@@ -1,5 +1,6 @@
 package me.dion.blink.activity.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -7,7 +8,10 @@ import android.widget.EditText
 import android.widget.TextView
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import me.dion.blink.R
+import me.dion.blink.activity.alerts.register.SameEmailExistAlert
+import me.dion.blink.activity.alerts.register.SameNicknameExistAlert
 import me.dion.blink.task.RequestTask
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
@@ -46,6 +50,28 @@ class RegisterAccountActivity : AppCompatActivity() {
 
         val response = RequestTask().execute(regRequest).get()
 
+        val json = JsonParser.parseString(response.body.string()).asJsonObject
 
+        if (json.get("error") != null) {
+            handleError(json.get("error").asString)
+        } else {
+            continueReg()
+        }
+    }
+
+    private fun continueReg() {
+        val intent = Intent(
+            this,
+            CheckEmailActivity::class.java
+        )
+        startActivity(intent)
+    }
+
+    private fun handleError(error: String) {
+        if (error.contains("email")) {
+            SameEmailExistAlert().show(supportFragmentManager, "sameEmailExistError")
+        } else if (error.contains("nickname")) {
+            SameNicknameExistAlert().show(supportFragmentManager, "sameNicknameExistError")
+        }
     }
 }

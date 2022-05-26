@@ -11,8 +11,8 @@ class SameNicknameExistAlert : DialogFragment() {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             builder
-                .setTitle("Invalid email address!")
-                .setMessage("Please check your email and try again.")
+                .setTitle("Error")
+                .setMessage("An user with this nickname has already registered. Choose another nickname.")
                 .setPositiveButton("Ok") {
                         dialog, _ -> dialog.cancel()
                 }
