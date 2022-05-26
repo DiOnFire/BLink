@@ -6,15 +6,17 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import me.dion.blink.R
 import me.dion.blink.activity.alerts.NoConnectionAlert
+import me.dion.blink.activity.alerts.auth.InvalidCredentialsAlert
 import me.dion.blink.activity.alerts.auth.TooShortLoginAlert
 import me.dion.blink.activity.alerts.auth.TooShortPasswordAlert
 import me.dion.blink.task.RequestTask
-import okhttp3.FormBody
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 
 class MainActivity : AppCompatActivity() {
     private lateinit var loginButton: Button
@@ -61,6 +63,9 @@ class MainActivity : AppCompatActivity() {
 
             if (response != null && response.isSuccessful) {
                 val accessToken = auth()
+                if (accessToken == "null") {
+                    InvalidCredentialsAlert().show(supportFragmentManager, "invalidCredentialsAlert")
+                }
             } else {
                 NoConnectionAlert().show(supportFragmentManager, "noConnectionAlert")
                 loginButton.isEnabled = true
@@ -69,10 +74,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun auth(): String {
-        val requestBody = FormBody.Builder()
-            .add("username", loginTextEdit.text.toString())
-            .add("password", passwordTextEdit.text.toString())
-            .build()
+        val obj = JsonObject()
+        obj.addProperty("username", loginTextEdit.text.toString())
+        obj.addProperty("password", passwordTextEdit.text.toString())
+
+        val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), Gson().toJson(obj))
 
         val authRequest = Request.Builder()
             .url(resources.getString(R.string.api_url_auth))
@@ -80,10 +86,13 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val response = RequestTask().execute(authRequest).get()
+        return parseToken(response)
     }
 
     private fun parseToken(response: Response): String {
-
+        val json = JsonParser.parseString(response.body.string()).asJsonObject
+        if (json.get("access_token") == null) return "null"
+        return json.get("access_token").asString
     }
 
     private fun executeRegister() {

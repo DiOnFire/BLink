@@ -5,7 +5,13 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import me.dion.blink.R
+import me.dion.blink.task.RequestTask
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.Request
+import okhttp3.RequestBody
 
 class RegisterAccountActivity : AppCompatActivity() {
     private lateinit var loginEdit: EditText
@@ -26,6 +32,20 @@ class RegisterAccountActivity : AppCompatActivity() {
     }
 
     private fun register() {
+        val obj = JsonObject()
+        obj.addProperty("login", loginEdit.text.toString())
+        obj.addProperty("password", passwordEdit.text.toString())
+        obj.addProperty("email", emailEdit.text.toString())
+
+        val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), Gson().toJson(obj))
+
+        val regRequest = Request.Builder()
+            .url(resources.getString(R.string.api_url_register))
+            .post(requestBody)
+            .build()
+
+        val response = RequestTask().execute(regRequest).get()
+
 
     }
 }

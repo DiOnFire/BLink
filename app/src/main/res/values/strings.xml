@@ -8,11 +8,12 @@
     <string name="password_text_edit_text">Password</string>
     <string name="forgot_password_text">Forgot password?</string>
     <string name="register_text">Don\'t have an account? Register a new one!</string>
-    <string name="bloomware_api_url">http://127.0.0.1:8000/</string>
-    <string name="api_url_auth">http://127.0.0.1:8000/api/users/auth</string>
-    <string name="api_url_status">http://127.0.0.1:8000/api/status</string>
-    <string name="api_url_get_me">http://127.0.0.1:8000/api/users/me</string>
-    <string name="api_url_send_mail">http://127.0.0.1:8000/api/users/me/mail_link</string>
+    <string name="bloomware_api_url">https://bloomware-web-api.herokuapp.com/</string>
+    <string name="api_url_auth">https://bloomware-web-api.herokuapp.com/api/users/auth</string>
+    <string name="api_url_status">https://bloomware-web-api.herokuapp.com/api/status</string>
+    <string name="api_url_get_me">https://bloomware-web-api.herokuapp.com/api/users/me</string>
+    <string name="api_url_register">https://bloomware-web-api.herokuapp.com/api/users/create</string>
+    <string name="api_url_send_mail">https://bloomware-web-api.herokuapp.com/api/users/me/mail_link</string>
     <string name="register_account">Create a new account</string>
     <string name="email">Email</string>
     <string name="back"><![CDATA[< Back]]></string>
