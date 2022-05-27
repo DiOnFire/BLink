@@ -1,4 +1,4 @@
-package me.dion.blink.activity.activities
+package me.dion.blink.activity.activities.pre
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,13 +10,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.dion.blink.R
 import me.dion.blink.activity.alerts.AbstractAlert
 import me.dion.blink.activity.alerts.LoadingDialog
-import me.dion.blink.task.RequestThread
+import me.dion.blink.util.RequestThread
 import me.dion.blink.util.FileUtil
 import me.dion.blink.util.SerializableResponse
 import okhttp3.*

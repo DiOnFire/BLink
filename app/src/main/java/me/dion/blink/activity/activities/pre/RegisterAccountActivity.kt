@@ -1,4 +1,4 @@
-package me.dion.blink.activity.activities
+package me.dion.blink.activity.activities.pre
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -15,8 +15,7 @@ import com.google.gson.JsonParser
 import me.dion.blink.R
 import me.dion.blink.activity.alerts.AbstractAlert
 import me.dion.blink.activity.alerts.LoadingDialog
-import me.dion.blink.task.RequestTask
-import me.dion.blink.task.RequestThread
+import me.dion.blink.util.RequestThread
 import me.dion.blink.util.SerializableResponse
 import me.dion.blink.util.Validator
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

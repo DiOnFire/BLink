@@ -1,4 +1,4 @@
-package me.dion.blink.task;
+package me.dion.blink.util;
 
 import android.os.Bundle;
 import android.os.Handler;

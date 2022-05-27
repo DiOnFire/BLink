@@ -1,4 +1,4 @@
-package me.dion.blink.activity.activities
+package me.dion.blink.activity.activities.pre
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
