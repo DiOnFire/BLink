@@ -8,7 +8,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="60dp"
-        android:layout_height="60dp"/>
+        android:layout_height="60dp"
+        android:src="@drawable/account"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -17,7 +18,6 @@
         android:paddingTop="8dp"
         android:textSize="20dp"
         android:text="Account Name"
-        android:textColor="@color/black"
         android:textStyle="bold"/>
 
     <TextView

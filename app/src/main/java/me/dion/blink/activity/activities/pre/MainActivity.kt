@@ -13,6 +13,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.dion.blink.R
+import me.dion.blink.activity.activities.dashboard.DashboardActivity
 import me.dion.blink.activity.alerts.AbstractAlert
 import me.dion.blink.activity.alerts.LoadingDialog
 import me.dion.blink.traits.RequestThread
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var registerText: TextView
     private lateinit var loadingDialog: LoadingDialog
     private val gson = Gson()
+    private lateinit var token: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         val metadata = FileUtil.loadData(applicationContext)
         if (metadata.has("access_token") && metadata.get("access_token").asString != "none") {
             loadingDialog.startLoadingDialog()
-            intent.putExtra("access_token", metadata.get("access_token").asString)
+            token = metadata.get("access_token").asString
             checkEmail()
         }
     }
@@ -125,6 +127,7 @@ class MainActivity : AppCompatActivity() {
                 if (accessToken == "null") {
                     AbstractAlert("Invalid credentials", "Login or password is not correct. Try again.").show(supportFragmentManager, "invalidCredentialsAlert")
                 } else {
+                    token = accessToken
                     intent.putExtra("access_token", accessToken)
                     save(accessToken)
                     checkEmail()
@@ -162,8 +165,9 @@ class MainActivity : AppCompatActivity() {
     private fun executeEmail() {
         val intent = Intent(
             this,
-            CheckEmailActivity::class.java
+            DashboardActivity::class.java
         )
+        intent.putExtra("access_token", token)
         startActivity(intent)
     }
 

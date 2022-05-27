@@ -1,12 +1,12 @@
 package me.dion.blink.traits
 
-data class Account(
+class Account(
     val id: Int,
     val username: String,
     val email: String,
-    val emailVerified: Boolean,
+    val email_verified: Boolean,
     val subscription: Boolean,
-    val discordLinked: Boolean,
-    val discordOauth: String,
-    val registerDate: String
-    )
+    val discord_linked: Boolean,
+    val discord_oauth: String,
+    val register_date: String
+    ) {}
