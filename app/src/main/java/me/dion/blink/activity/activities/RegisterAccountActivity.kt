@@ -1,8 +1,11 @@
 package me.dion.blink.activity.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -13,11 +16,14 @@ import me.dion.blink.R
 import me.dion.blink.activity.alerts.AbstractAlert
 import me.dion.blink.activity.alerts.LoadingDialog
 import me.dion.blink.task.RequestTask
+import me.dion.blink.task.RequestThread
+import me.dion.blink.util.SerializableResponse
 import me.dion.blink.util.Validator
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
 
+@SuppressLint("HandlerLeak")
 class RegisterAccountActivity : AppCompatActivity() {
     private lateinit var loginEdit: EditText
     private lateinit var emailEdit: EditText
@@ -42,8 +48,8 @@ class RegisterAccountActivity : AppCompatActivity() {
             finish()
         }
         signUpBtn.setOnClickListener {
-            loadingDialog.startLoadingDialog()
             if (validateRegister()) {
+                loadingDialog.startLoadingDialog()
                 register()
             }
         }
@@ -75,17 +81,23 @@ class RegisterAccountActivity : AppCompatActivity() {
             .post(requestBody)
             .build()
 
-        val response = RequestTask().execute(regRequest).get()
-
-        val data = response.body.string()
-        val json = JsonParser.parseString(data).asJsonObject
-
-        if (json.get("error") != null) {
-            handleError(json.get("error").asString)
-        } else {
-            loadingDialog.dismissDialog()
-            continueReg()
+        val handler = object : Handler() {
+            override fun handleMessage(msg: Message) {
+                val bundle = msg.data
+                val response: SerializableResponse = bundle.get("response") as SerializableResponse
+                val data = response.response.body.string()
+                val json = JsonParser.parseString(data).asJsonObject
+                loadingDialog.dismissDialog()
+                if (json.get("error") != null) {
+                    handleError(json.get("error").asString)
+                } else {
+                    continueReg()
+                }
+            }
         }
+
+        val thread = RequestThread(handler, regRequest)
+        thread.start()
     }
 
     private fun continueReg() {

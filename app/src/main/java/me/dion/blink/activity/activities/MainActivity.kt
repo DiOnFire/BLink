@@ -10,17 +10,18 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.dion.blink.R
 import me.dion.blink.activity.alerts.AbstractAlert
 import me.dion.blink.activity.alerts.LoadingDialog
 import me.dion.blink.task.RequestThread
+import me.dion.blink.util.FileUtil
 import me.dion.blink.util.SerializableResponse
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-
-// TODO: ACCESS TOKEN LOADER
+import java.lang.Exception
 
 @SuppressLint("HandlerLeak")
 class MainActivity : AppCompatActivity() {
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var forgotPwdText: TextView
     private lateinit var registerText: TextView
     private lateinit var loadingDialog: LoadingDialog
+    private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,14 +44,30 @@ class MainActivity : AppCompatActivity() {
         registerText = findViewById(R.id.create_acc_text)
         loadingDialog = LoadingDialog(this@MainActivity)
 
+        load()
+
         loginButton.setOnClickListener {
-            loadingDialog.startLoadingDialog()
             executeLogin()
         }
 
         registerText.setOnClickListener {
             executeRegister()
         }
+    }
+
+    private fun load() {
+        val metadata = FileUtil.loadData(applicationContext)
+        if (metadata.has("access_token") && metadata.get("access_token").asString != "none") {
+            loadingDialog.startLoadingDialog()
+            intent.putExtra("access_token", metadata.get("access_token").asString)
+            checkEmail()
+        }
+    }
+
+    private fun save(token: String) {
+        val json = JsonObject()
+        json.add("access_token", JsonParser.parseString(token))
+        FileUtil.saveData(gson.toJson(json), applicationContext)
     }
 
     private fun executeLogin() {
@@ -67,6 +85,8 @@ class MainActivity : AppCompatActivity() {
                 .get()
                 .build()
 
+            loadingDialog.startLoadingDialog()
+
             val handler = object : Handler() {
                 override fun handleMessage(msg: Message) {
                     val bundle = msg.data
@@ -79,6 +99,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
 
             val thread = RequestThread(handler, testRequest)
             thread.start()
@@ -106,6 +127,7 @@ class MainActivity : AppCompatActivity() {
                     AbstractAlert("Invalid credentials", "Login or password is not correct. Try again.").show(supportFragmentManager, "invalidCredentialsAlert")
                 } else {
                     intent.putExtra("access_token", accessToken)
+                    save(accessToken)
                     checkEmail()
                 }
             }
@@ -130,8 +152,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun parseEmail(response: Response): Boolean {
-        val json = JsonParser.parseString(response.body.string()).asJsonObject
-        return json.get("email_verified").asBoolean
+        return try {
+            val json = JsonParser.parseString(response.body.string()).asJsonObject
+            json.get("email_verified").asBoolean
+        } catch (e: Exception) {
+            false
+        }
     }
 
     private fun executeEmail() {
@@ -152,8 +178,12 @@ class MainActivity : AppCompatActivity() {
                 val bundle = msg.data
                 // сериализабле респонз = мега говно чтобы наебать андроид через сериализацию (адаптер с okhttp на байты)
                 val response: SerializableResponse = bundle.get("response") as SerializableResponse
-                if (!parseEmail(response.response)) {
+                if (JsonParser.parseString(response.response.body.string()).asJsonObject.has("email_verified") && !parseEmail(response.response)) {
                     executeEmail()
+                } else {
+                    intent.removeExtra("access_token")
+                    save("none")
+                    AbstractAlert("Session expired", "Your session expired. Please login again.").show(supportFragmentManager, "sessionExpiredAlert")
                 }
             }
         }
