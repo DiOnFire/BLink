@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="@string/account_management">
+        <menu>
+            <item
+                android:id="@+id/nav_home"
+                android:icon="@drawable/home_icon"
+                android:title="@string/home"/>
+
+            <item
+                android:id="@+id/nav_account"
+                android:icon="@drawable/account_icon"
+                android:title="@string/account"/>
+
+            <item
+                android:id="@+id/nav_cloud"
+                android:icon="@drawable/cloud_icon"
+                android:title="@string/cloud"/>
+
+            <item
+                android:id="@+id/nav_devices"
+                android:icon="@drawable/devices_icon"
+                android:title="@string/devices"/>
+        </menu>
+    </item>
+
+    <item android:title="@string/game">
+        <menu>
+            <item
+                android:id="@+id/nav_remote"
+                android:icon="@drawable/remote_connect_icon"
+                android:title="@string/remote_connect"/>
+            <item
+                android:id="@+id/nav_configs"
+                android:icon="@drawable/configs_icon"
+                android:title="@string/configs"/>
+        </menu>
+    </item>
+    <item android:title="@string/application_management">
+        <menu>
+            <item
+                android:title="@string/contact_support"
+                android:icon="@drawable/support_icon"
+                android:id="@+id/nav_support"/>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/share_icon"
+                android:title="@string/share"/>
+            <item
+                android:title="@string/settings"
+                android:icon="@drawable/settings_icon"
+                android:id="@+id/nav_settings"/>
+        </menu>
+    </item>
+</menu>

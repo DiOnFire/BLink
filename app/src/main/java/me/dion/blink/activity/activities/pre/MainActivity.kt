@@ -15,9 +15,9 @@ import com.google.gson.JsonParser
 import me.dion.blink.R
 import me.dion.blink.activity.alerts.AbstractAlert
 import me.dion.blink.activity.alerts.LoadingDialog
-import me.dion.blink.util.RequestThread
+import me.dion.blink.traits.RequestThread
 import me.dion.blink.util.FileUtil
-import me.dion.blink.util.SerializableResponse
+import me.dion.blink.traits.SerializableResponse
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.lang.Exception

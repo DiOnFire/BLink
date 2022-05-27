@@ -1,4 +1,4 @@
-package me.dion.blink.util;
+package me.dion.blink.traits;
 
 import java.io.Serializable;
 

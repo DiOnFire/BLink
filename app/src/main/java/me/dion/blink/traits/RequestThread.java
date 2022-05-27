@@ -1,4 +1,4 @@
-package me.dion.blink.util;
+package me.dion.blink.traits;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -6,7 +6,6 @@ import android.os.Message;
 
 import java.io.IOException;
 
-import me.dion.blink.util.SerializableResponse;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 

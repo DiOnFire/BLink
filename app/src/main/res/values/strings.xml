@@ -30,4 +30,16 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="home">Home</string>
+    <string name="account">Account</string>
+    <string name="cloud">Cloud</string>
+    <string name="devices">Devices</string>
+    <string name="account_management">Account management</string>
+    <string name="game">Bloomware Services</string>
+    <string name="remote_connect">Remote Connect</string>
+    <string name="configs">Configs</string>
+    <string name="application_management">Application Management</string>
+    <string name="contact_support">Contact support</string>
+    <string name="share">Share</string>
+    <string name="settings">Settings</string>
 </resources>
