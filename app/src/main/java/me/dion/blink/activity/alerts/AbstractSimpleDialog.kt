@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import java.lang.IllegalStateException
 
-class AbstractAlert(val title: String, val message: String) : DialogFragment() {
+class AbstractSimpleDialog(private val title: String, private val message: String) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)

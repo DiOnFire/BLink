@@ -13,7 +13,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.dion.blink.R
-import me.dion.blink.activity.alerts.AbstractAlert
+import me.dion.blink.activity.alerts.AbstractSimpleDialog
 import me.dion.blink.activity.alerts.LoadingDialog
 import me.dion.blink.traits.RequestThread
 import me.dion.blink.traits.SerializableResponse
@@ -56,11 +56,11 @@ class RegisterAccountActivity : AppCompatActivity() {
 
     private fun validateRegister(): Boolean {
         if (loginEdit.text.length < 3) {
-            AbstractAlert("Login too short", "Login or password is not correct. Try again.").show(supportFragmentManager, "tooShortLoginAlert")
+            AbstractSimpleDialog("Login too short", "Login or password is not correct. Try again.").show(supportFragmentManager, "tooShortLoginAlert")
         } else if (passwordEdit.text.length < 8) {
-            AbstractAlert("Password too short", "Your password must contain 8 or more symbols.").show(supportFragmentManager, "tooShortPasswordAlert")
+            AbstractSimpleDialog("Password too short", "Your password must contain 8 or more symbols.").show(supportFragmentManager, "tooShortPasswordAlert")
         } else if (!Validator.isEmail(emailEdit.text.toString())) {
-            AbstractAlert("Invalid email", "Please check your email and try again.").show(supportFragmentManager, "invalidEmailAlert")
+            AbstractSimpleDialog("Invalid email", "Please check your email and try again.").show(supportFragmentManager, "invalidEmailAlert")
         } else {
             return true
         }
@@ -109,9 +109,9 @@ class RegisterAccountActivity : AppCompatActivity() {
 
     private fun handleError(error: String) {
         if (error.contains("email")) {
-            AbstractAlert("Error", "An user with this email has already registered. Choose another email address.").show(supportFragmentManager, "sameEmailExistError")
+            AbstractSimpleDialog("Error", "An user with this email has already registered. Choose another email address.").show(supportFragmentManager, "sameEmailExistError")
         } else if (error.contains("nickname")) {
-            AbstractAlert("Error", "An user with this nickname has already registered. Choose another nickname.").show(supportFragmentManager, "sameNicknameExistError")
+            AbstractSimpleDialog("Error", "An user with this nickname has already registered. Choose another nickname.").show(supportFragmentManager, "sameNicknameExistError")
         }
     }
 }

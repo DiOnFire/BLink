@@ -46,4 +46,10 @@
 
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="welcome_to_blink">Welcome to Blink!</string>
+    <string name="latest_changelog">Latest changelog:</string>
+
+    <string name="logout_dialog_msg">When re-authorizing, you will need to enter the data from the account again.</string>
+    <string name="sure">Are you sure?</string>
+    <string name="cancel">Cancel</string>
 </resources>

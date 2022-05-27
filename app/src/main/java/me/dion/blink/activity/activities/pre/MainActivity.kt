@@ -14,7 +14,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.dion.blink.R
 import me.dion.blink.activity.activities.dashboard.DashboardActivity
-import me.dion.blink.activity.alerts.AbstractAlert
+import me.dion.blink.activity.alerts.AbstractSimpleDialog
 import me.dion.blink.activity.alerts.LoadingDialog
 import me.dion.blink.traits.RequestThread
 import me.dion.blink.util.FileUtil
@@ -75,10 +75,10 @@ class MainActivity : AppCompatActivity() {
         loginButton.isEnabled = false
 
         if (loginTextEdit.text.length < 3) {
-            AbstractAlert("Login too short", "Your login must contain 3 or more symbols").show(supportFragmentManager, "tooShortLoginAlert")
+            AbstractSimpleDialog("Login too short", "Your login must contain 3 or more symbols").show(supportFragmentManager, "tooShortLoginAlert")
             loginButton.isEnabled = true
         } else if (passwordTextEdit.text.length < 8) {
-            AbstractAlert("Password too short", "Your password must contain 8 or more symbols.").show(supportFragmentManager, "tooShortPasswordAlert")
+            AbstractSimpleDialog("Password too short", "Your password must contain 8 or more symbols.").show(supportFragmentManager, "tooShortPasswordAlert")
             loginButton.isEnabled = true
         } else {
             val testRequest = Request.Builder()
@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                     if (response.response != null && response.response.isSuccessful) {
                         auth()
                     } else {
-                        AbstractAlert("Connection error", "Something went wrong. Try again later.").show(supportFragmentManager, "noConnectionAlert")
+                        AbstractSimpleDialog("Connection error", "Something went wrong. Try again later.").show(supportFragmentManager, "noConnectionAlert")
                         loginButton.isEnabled = true
                     }
                 }
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
                 val response: SerializableResponse = bundle.get("response") as SerializableResponse
                 val accessToken = parseToken(response.response)
                 if (accessToken == "null") {
-                    AbstractAlert("Invalid credentials", "Login or password is not correct. Try again.").show(supportFragmentManager, "invalidCredentialsAlert")
+                    AbstractSimpleDialog("Invalid credentials", "Login or password is not correct. Try again.").show(supportFragmentManager, "invalidCredentialsAlert")
                 } else {
                     token = accessToken
                     save(accessToken)
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     intent.removeExtra("access_token")
                     save("none")
-                    AbstractAlert("Session expired", "Your session expired. Please login again.").show(supportFragmentManager, "sessionExpiredAlert")
+                    AbstractSimpleDialog("Session expired", "Your session expired. Please login again.").show(supportFragmentManager, "sessionExpiredAlert")
                 }
             }
         }
