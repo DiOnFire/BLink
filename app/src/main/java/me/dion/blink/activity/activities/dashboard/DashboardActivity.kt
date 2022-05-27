@@ -73,7 +73,6 @@ class DashboardActivity : AppCompatActivity() {
                 val bundle = msg.data
                 val response: SerializableResponse = bundle.get("response") as SerializableResponse
                 val data = response.response.body.string()
-                println(data)
                 account = parseAccount(JsonParser.parseString(data).asJsonObject)
                 loginText.text = account.username
                 emailText.text = account.email

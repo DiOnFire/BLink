@@ -128,7 +128,6 @@ class MainActivity : AppCompatActivity() {
                     AbstractAlert("Invalid credentials", "Login or password is not correct. Try again.").show(supportFragmentManager, "invalidCredentialsAlert")
                 } else {
                     token = accessToken
-                    intent.putExtra("access_token", accessToken)
                     save(accessToken)
                     checkEmail()
                 }
@@ -181,7 +180,9 @@ class MainActivity : AppCompatActivity() {
                 val bundle = msg.data
                 // сериализабле респонз = мега говно чтобы наебать андроид через сериализацию (адаптер с okhttp на байты)
                 val response: SerializableResponse = bundle.get("response") as SerializableResponse
-                if (JsonParser.parseString(response.response.body.string()).asJsonObject.has("email_verified") && !parseEmail(response.response)) {
+                val body = response.response.body.string()
+                println(body)
+                if (JsonParser.parseString(body).asJsonObject.has("email_verified") && !parseEmail(response.response)) {
                     executeEmail()
                 } else {
                     intent.removeExtra("access_token")
@@ -193,7 +194,7 @@ class MainActivity : AppCompatActivity() {
 
         // аццесс через токен
         val headers = Headers.Builder()
-            .add("Authorization", "Bearer " + intent.getStringExtra("access_token"))
+            .add("Authorization", "Bearer $token")
             .add("credentials", "include")
             .build()
 

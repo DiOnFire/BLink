@@ -35,13 +35,14 @@
     <string name="cloud">Cloud</string>
     <string name="devices">Devices</string>
     <string name="account_management">Account management</string>
-    <string name="game">Bloomware Services</string>
-    <string name="remote_connect">Remote Connect</string>
+    <string name="game">Bloomware services</string>
+    <string name="remote_connect">Remote connect</string>
     <string name="configs">Configs</string>
-    <string name="application_management">Application Management</string>
+    <string name="application_management">Application management</string>
     <string name="contact_support">Contact support</string>
     <string name="share">Share</string>
     <string name="settings">Settings</string>
+    <string name="logout">Sign out</string>
 
     <string name="open">Open</string>
     <string name="close">Close</string>

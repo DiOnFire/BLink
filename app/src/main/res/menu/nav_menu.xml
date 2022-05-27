@@ -53,6 +53,10 @@
                 android:title="@string/settings"
                 android:icon="@drawable/settings_icon"
                 android:id="@+id/nav_settings"/>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logout_icon"
+                android:title="@string/logout"/>
         </menu>
     </item>
 </menu>
