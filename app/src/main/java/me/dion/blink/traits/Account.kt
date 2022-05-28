@@ -1,5 +1,7 @@
 package me.dion.blink.traits
 
+import java.io.Serializable
+
 class Account(
     val id: Int,
     val username: String,
@@ -9,4 +11,4 @@ class Account(
     val discord_linked: Boolean,
     val discord_oauth: String,
     val register_date: String
-    ) {}
+    ) : Serializable

@@ -13,6 +13,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.dion.blink.R
+import me.dion.blink.activity.activities.dashboard.AccountActivity
 import me.dion.blink.activity.activities.dashboard.DashboardActivity
 import me.dion.blink.activity.activities.pre.MainActivity
 import me.dion.blink.traits.Account
@@ -39,6 +40,8 @@ class NavigationDrawerBuilder(val activity: AppCompatActivity) {
         loginText = headerView.findViewById(R.id.user_name_text)
         emailText = headerView.findViewById(R.id.email_text)
 
+        loadAccountData()
+
         val toggle = ActionBarDrawerToggle(
             activity,
             drawerLayout,
@@ -48,8 +51,6 @@ class NavigationDrawerBuilder(val activity: AppCompatActivity) {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        loadAccountData()
-
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         navView.setNavigationItemSelectedListener {
@@ -57,7 +58,7 @@ class NavigationDrawerBuilder(val activity: AppCompatActivity) {
                 R.id.nav_home -> navHomeClick()
                 R.id.nav_cloud -> navCloudClick()
                 R.id.nav_devices -> navDevicesClick()
-                R.id.nav_account -> navAccountClick()
+                R.id.nav_account -> navAccountClick(account)
                 R.id.nav_configs -> navConfigsClick()
                 R.id.nav_remote -> navRemoteClick()
                 R.id.nav_logout -> navLogoutClick()
@@ -74,6 +75,8 @@ class NavigationDrawerBuilder(val activity: AppCompatActivity) {
             activity,
             DashboardActivity::class.java
         )
+        intent.putExtra("account", account)
+        intent.putExtra("access_token", activity.intent.getStringExtra("access_token"))
         activity.startActivity(intent)
     }
 
@@ -81,8 +84,14 @@ class NavigationDrawerBuilder(val activity: AppCompatActivity) {
 
     }
 
-    private fun navAccountClick() {
-
+    private fun navAccountClick(account: Account) {
+        val intent = Intent(
+            activity,
+            AccountActivity::class.java
+        )
+        intent.putExtra("account", account)
+        intent.putExtra("access_token", activity.intent.getStringExtra("access_token"))
+        activity.startActivity(intent)
     }
 
     private fun navConfigsClick() {
@@ -156,6 +165,7 @@ class NavigationDrawerBuilder(val activity: AppCompatActivity) {
                 val bundle = msg.data
                 val response: SerializableResponse = bundle.get("response") as SerializableResponse
                 val data = response.response.body.string()
+                println(data)
                 account = parseAccount(JsonParser.parseString(data).asJsonObject)
                 loginText.text = account.username
                 emailText.text = account.email

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item android:title="@string/main_info">
+        <menu>
+            <item
+                android:id="@+id/personal_data_nickname"
+                android:title="@string/username"
+                android:icon="@drawable/person_icon">
+            </item>
+            <item
+                android:id="@+id/personal_data_create_date"
+                android:title="@string/creation_date"
+                android:icon="@drawable/calendar_icon"/>
+            <item
+                android:id="@+id/personal_data_uid"
+                android:title="@string/uid"
+                android:icon="@drawable/data_icon"/>
+        </menu>
+    </item>
+    <item android:title="@string/connections">
+        <menu>
+            <item
+                android:id="@+id/personal_data_email"
+                android:title="@string/email"
+                android:icon="@drawable/email_icon"/>
+            <item
+                android:id="@+id/personal_data_discord"
+                android:title="@string/discord"
+                android:icon="@drawable/person_icon"/>
+        </menu>
+    </item>
+</menu>

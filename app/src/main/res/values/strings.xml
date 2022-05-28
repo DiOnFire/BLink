@@ -52,4 +52,22 @@
     <string name="logout_dialog_msg">When re-authorizing, you will need to enter the data from the account again.</string>
     <string name="sure">Are you sure?</string>
     <string name="cancel">Cancel</string>
+    <string name="personal_data">Personal data</string>
+    <string name="secure_status">secure status</string>
+    <string name="security">Security</string>
+    <string name="subscriptions">Subscriptions</string>
+
+    <string name="account_secured">Account is secured</string>
+    <string name="account_not_secured">Account is not secured</string>
+
+    <string name="fa_email">2FA via email is active</string>
+    <string name="fa_discord">2FA via Discord is active</string>
+    <string name="fa_dis_email">2FA via email and Discord is active</string>
+    <string name="fa_no">2FA is not active</string>
+    <string name="main_info">Main info</string>
+    <string name="username">Username</string>
+    <string name="creation_date">Creation date</string>
+    <string name="uid">UID</string>
+    <string name="connections">Connections</string>
+    <string name="discord">Discord</string>
 </resources>
